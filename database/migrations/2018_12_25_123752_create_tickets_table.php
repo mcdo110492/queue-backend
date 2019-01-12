@@ -19,6 +19,7 @@ class CreateTicketsTable extends Migration
             $table->string('ticket_number');
             $table->smallInteger('priority')->default(0);
             $table->smallInteger('status')->default(0);
+            $table->date('date_issued');
             $table->timestamps();
         });
     }

@@ -13,6 +13,13 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
+        /**
+         * Roles
+         * 1- Admin
+         * 2- Counter
+         * 3- Ticket Issuer
+         */
+        
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('username')->unique();
@@ -21,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->string('name',150);
             $table->string('image_path',250)->default('default.jpg');
             $table->smallInteger('role');
+            $table->smallInteger('status')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });
