@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use \Tymon\JWTAuth\Exceptions\UserNotDefinedException;
 
 use App\Tickets;
 use App\TicketsUsers;
@@ -17,8 +18,9 @@ class TicketsController extends Controller
     {
 
         $this->middleware('auth:api');
-        $id = 2;
-        $this->user_id = $id;
+        
+        $user = auth()->user();
+        $this->user_id = $user->id;
     }
 
     /**

@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
+Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('login', 'AuthenticationJWT@login');
     Route::post('logout', 'AuthenticationJWT@logout');
     Route::post('refresh', 'AuthenticationJWT@refresh');
