@@ -32,7 +32,7 @@ class UsersController extends Controller
 
         if($role === 1)
         {
-            return response()->json(['payload' => "User role does not exists"]);
+            return response()->json(['payload' => "Unauthorized Role Assignment"], 401);
         }
 
         $data = [
