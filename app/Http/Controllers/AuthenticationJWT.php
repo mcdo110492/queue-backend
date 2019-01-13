@@ -40,7 +40,9 @@ class AuthenticationJWT extends Controller
 
     public function me()
     {
-        return response()->json(auth()->user());
+        $user = auth()->user();
+
+        return response()->json(['payload' => compact('user')],200);
     }
 
     public function logout()
