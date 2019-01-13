@@ -42,7 +42,7 @@ class CountersController extends Controller
 
         Counters::create($validatedData);
 
-        return response()->json(['status' => self::CREATE_STATUS, 'payload' => self::CREATE_STATUS_MESSAGE]);
+        return response()->json(['status' => self::CREATE_STATUS, 'payload' => self::CREATE_STATUS_MESSAGE], 201);
     }
 
     public function update(Request $request, $id)

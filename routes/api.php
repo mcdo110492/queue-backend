@@ -38,7 +38,7 @@ Route::post('/announcements', 'AnnouncementsController@store');
 Route::put('/announcements/{id}', 'AnnouncementsController@update');
 
 
-Route::get('/counters', 'CountersController@getWithPagination');
+Route::get('/counters', 'CountersController@getAll');
 
 Route::post('/counters', 'CountersController@store');
 
