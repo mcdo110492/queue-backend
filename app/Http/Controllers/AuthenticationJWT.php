@@ -45,19 +45,21 @@ class AuthenticationJWT extends Controller
         return response()->json(['payload' => compact('user')],200);
     }
 
+
+
+    public function refresh()
+    {
+
+        $token = auth()->refresh();
+
+        return response()->json(['payload' => compact('token')], 200);
+    }
+
     public function logout()
     {
         auth()->logout();
 
         return response()->json(['payload' => "Logout Successfully"],200);
-    }
-
-
-    public function refresh()
-    {
-        $token = auth()->refresh();
-
-        return response()->json(['payload' => compact('token')], 200);
     }
 
     public function checkUserStatus($user)

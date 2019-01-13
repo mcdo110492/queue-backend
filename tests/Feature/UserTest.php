@@ -9,8 +9,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 class UserTest extends TestCase
 {
-    use WithoutMiddleware;
-    use RefreshDatabase;
+    use WithoutMiddleware, RefreshDatabase;
    
 
     public function testUserCreate()
