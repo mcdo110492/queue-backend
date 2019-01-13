@@ -32,7 +32,10 @@ class AuthenticationJWT extends Controller
             return response()->json(['payload' => 'Invalid username or password'], 401);
         }
 
-        return $this->respondWithToken($token);
+        $payload = ['user' => $user, 'token' => $token];
+
+        return response()->json(compact('payload'),200);
+
     }
 
     public function me()
@@ -50,13 +53,9 @@ class AuthenticationJWT extends Controller
 
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
-    }
+        $token = auth()->refresh();
 
-    public function respondWithToken($token)
-    {
-        $payload = ['access_token'=> $token, 'token_type' => 'bearer'];
-        return response()->json(compact('payload'),200);
+        return response()->json(['payload' => compact('token')], 200);
     }
 
     public function checkUserStatus($user)
