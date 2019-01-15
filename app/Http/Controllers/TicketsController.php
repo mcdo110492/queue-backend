@@ -88,7 +88,7 @@ class TicketsController extends Controller
         {
             //Get the latest current user transaction
             $checkUserCurrentTransaction = TicketsUsers::where(['user_id' => $this->user_id])->latest()->first();
-            $userCurrentTicketStatus = $checkUserCurrentTransaction->status;
+            $userCurrentTicketStatus = isset($checkUserCurrentTransaction->status) ? $checkUserCurrentTransaction->status  : 0;
             if($userCurrentTicketStatus === 1 || $userCurrentTicketStatus === 2)
             {
                 return response()->json(['payload' => 'Unable to call this ticket. You still have other ticket to process or complete'], 403);
