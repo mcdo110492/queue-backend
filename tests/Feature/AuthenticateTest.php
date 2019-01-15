@@ -15,7 +15,6 @@ class AuthenticateTest extends TestCase
     
     public function testLogin()
     {
-        $this->withoutMiddleware();
 
         $user = factory(\App\User::class)->create();
         
