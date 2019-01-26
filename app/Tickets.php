@@ -20,5 +20,4 @@ class Tickets extends Model
     {
         return $this->hasMany('App\TicketsUsers', 'ticket_id');
     }
-
 }
