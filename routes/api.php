@@ -22,6 +22,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('logout', 'AuthenticationJWT@logout');
     Route::post('refresh', 'AuthenticationJWT@refresh');
     Route::post('me', 'AuthenticationJWT@me');
+    Route::post('client/route/guard', 'AuthenticationJWT@clientRouteGuard');
 });
 
 

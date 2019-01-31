@@ -29,7 +29,7 @@ class AuthenticationJWT extends Controller
 
         if(! $token = auth()->claims(compact('user'))->attempt($credentials))
         {
-            return response()->json(['payload' => 'Invalid username or password'], 401);
+            return response()->json(['payload' => 'Invalid username or password'], 404);
         }
 
         $payload = ['user' => $user, 'token' => $token];
@@ -60,6 +60,15 @@ class AuthenticationJWT extends Controller
         auth()->logout();
 
         return response()->json(['payload' => "Logout Successfully"],200);
+    }
+
+    /**
+     * This method check the token from the client side while navigating
+     * For nwo this only return a payload ok
+     */
+    public function clientRouteGuard()
+    {
+        return response()->json(['payload' => 'OK'], 200);
     }
 
     public function checkUserStatus($user)
