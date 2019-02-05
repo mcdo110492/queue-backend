@@ -8,10 +8,6 @@ use App\UsersCounters;
 
 class UsersCountersController extends Controller
 {
-    const CREATE_STATUS = 201;
-    const OK_STATUS = 200;
-    const CREATE_STATUS_MESSAGE = "Counter Created";
-    const UPDATE_STATUS_MESSAGE = "Counter Updated";
 
     public function __construct()
     {
@@ -26,12 +22,24 @@ class UsersCountersController extends Controller
 
         $get = UsersCounters::with(['user','counter'])->get();
 
-        return response()->json(['status' => self::OK_STATUS, 'payload' => ['count' => $count, 'data' => $get]]);
+        return response()->json(['payload' => ['count' => $count, 'data' => $get]], 200);
+    }
+
+    public function checkUniqueValue(Request $request)
+    {
+        $field = $request->input('field');
+        $value = $request->input('value');
+        $id = $request->input('id');
+
+        $table = 'users_counters';
+
+        $validate = $this->validateUniqueValue($table, $field, $value, $id);
+
+        return response()->json($validate, $validate['status']);
     }
 
     public function store(Request $request)
     {
-        //Validate data through request valida method
         $request->validate([
             'counter_id' => 'required|integer|exists:counters,id|unique:users_counters,counter_id',
             'user_id' => 'required|integer|exists:users,id|unique:users_counters,user_id'
@@ -42,9 +50,9 @@ class UsersCountersController extends Controller
             'user_id' => $request->input('user_id')
         ];
 
-        UsersCounters::create($validatedData);
+        $create = UsersCounters::create($validatedData);
 
-        return response()->json(['status' => self::CREATE_STATUS, 'payload' => self::CREATE_STATUS_MESSAGE]);
+        return response()->json(['payload' => ['data' => $create]], 201);
     }
 
     public function update(Request $request, $id)
@@ -63,6 +71,8 @@ class UsersCountersController extends Controller
 
         $counter->update($validatedData);
 
-        return response()->json(['status' => self::OK_STATUS, 'payload' => self::UPDATE_STATUS_MESSAGE]);
+        $updatedData = Counters::findOrFail($id);
+
+        return response()->json(['payload' => [ 'data' => $updatedData ]], 200);
     }
 }

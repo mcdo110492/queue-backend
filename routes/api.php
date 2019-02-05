@@ -28,6 +28,8 @@ Route::group(['prefix' => 'auth'], function ($router) {
 
 Route::post('/users', 'UsersController@create');
 
+Route::post('/users/validate', 'UsersController@checkUniqueValue');
+
 Route::post('/users/reset/password', 'UsersController@resetPassword');
 
 
@@ -41,12 +43,16 @@ Route::put('/announcements/{id}', 'AnnouncementsController@update');
 
 Route::get('/counters', 'CountersController@getAll');
 
+Route::post('/counters/validate', 'CountersController@checkUniqueValue');
+
 Route::post('/counters', 'CountersController@store');
 
 Route::put('/counters/{id}', 'CountersController@update');
 
 
 Route::get('/counters/users', 'UsersCountersController@getAll');
+
+Route::post('/counters/users/validate', 'UsersCountersController@checkUniqueValue');
 
 Route::post('/counters/users', 'UsersCountersController@store');
 

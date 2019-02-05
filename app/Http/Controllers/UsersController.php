@@ -49,6 +49,19 @@ class UsersController extends Controller
 
     }
 
+    public function checkUniqueValue(Request $request)
+    {
+        $field = $request->input('field');
+        $value = $request->input('value');
+        $id = $request->input('id');
+
+        $table = 'users';
+
+        $validate = $this->validateUniqueValue($table, $field, $value, $id);
+
+        return response()->json($validate, $validate['status']);
+    }
+
     public function resetPassword(Request $request)
     {
 
