@@ -17,6 +17,12 @@ class UsersController extends Controller
         $this->middleware('auth:api');
     }
     
+    public function getUsers()
+    {
+        $get = User::where('role','!=', 1)->get();
+
+        return response()->json(['payload' => ['data' => $get]]);
+    }
 
     public function create(Request $request)
     {

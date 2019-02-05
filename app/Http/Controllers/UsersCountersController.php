@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\UsersCounters;
 
 class UsersCountersController extends Controller
@@ -15,15 +14,14 @@ class UsersCountersController extends Controller
     }
 
 
-    public function getAll()
-    {
-
+    public function getAll() {
+        
         $count = UsersCounters::count();
-
         $get = UsersCounters::with(['user','counter'])->get();
-
         return response()->json(['payload' => ['count' => $count, 'data' => $get]], 200);
+
     }
+
 
     public function checkUniqueValue(Request $request)
     {
@@ -52,26 +50,28 @@ class UsersCountersController extends Controller
 
         $create = UsersCounters::create($validatedData);
 
-        return response()->json(['payload' => ['data' => $create]], 201);
+        $data = UsersCounters::with(['user','counter'])->findOrFail($create->id);
+
+        return response()->json(['payload' => ['data' => $data]], 201);
     }
 
     public function update(Request $request, $id)
     {
-        $counter = Counters::findOrFail($id);
+        $counter = UsersCounters::findOrFail($id);
 
         $request->validate([
-            'counter_name' => "required|max:50|unique:counters,counter_name,$id",
-            'position' => "required|integer|unique:counters,position,$id"
+            'counter_id' => "required|integer|unique:users_counters,counter_id,$id",
+            'user_id' => "required|integer|unique:users_counters,user_id,$id"
         ]);
 
         $validatedData = [
-            'counter_name' => $request->input('counter_name'),
-            'position' => $request->input('position')
+            'counter_id' => $request->input('counter_id'),
+            'user_id' => $request->input('user_id')
         ];
 
         $counter->update($validatedData);
 
-        $updatedData = Counters::findOrFail($id);
+        $updatedData = UsersCounters::with(['user','counter'])->findOrFail($id);
 
         return response()->json(['payload' => [ 'data' => $updatedData ]], 200);
     }

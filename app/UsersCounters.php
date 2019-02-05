@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class UsersCounters extends Model
 {
     protected $table = 'users_counters';
@@ -22,4 +23,5 @@ class UsersCounters extends Model
     {
         return $this->belongsTo("App\Counters");
     }
+
 }

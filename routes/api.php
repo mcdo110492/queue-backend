@@ -26,6 +26,8 @@ Route::group(['prefix' => 'auth'], function ($router) {
 });
 
 
+Route::get('/users', 'UsersController@getUsers');
+
 Route::post('/users', 'UsersController@create');
 
 Route::post('/users/validate', 'UsersController@checkUniqueValue');
