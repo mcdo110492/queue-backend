@@ -60,7 +60,7 @@ class TicketsController extends Controller
         $payload = [
             'id' => $ticket->id,
             'date_issed' => $ticket->date_issued,
-            'created_at' => $ticket->created_at,
+            'created_at' => $ticket->created_at->toDateTimeString(),
             'priority' => $ticket->priority,
             'ticket_number' => $ticket->ticket_number,
             'people_in_waiting' => $getPeopleinWating,
