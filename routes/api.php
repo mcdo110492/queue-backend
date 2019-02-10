@@ -64,7 +64,7 @@ Route::put('/counters/users/{id}', 'UsersCountersController@update');
 
 Route::get('/tickets/pending', 'TicketsController@getNowPending');
 
-Route::post('/tickets/generate', 'TicketsController@issue');
+Route::post('/tickets/generate', 'TicketsController@generate');
 
 Route::post('/tickets/call', 'TicketsController@call');
 

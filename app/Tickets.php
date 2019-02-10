@@ -9,7 +9,6 @@ class Tickets extends Model
     protected $table = 'tickets';
 
     protected $fillable = [
-        'name',
         'ticket_number',
         'priority',
         'status',

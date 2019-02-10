@@ -12,22 +12,24 @@ use App\TicketsUsers;
 class TicketsController extends Controller
 {
 
-    protected $user_id;
 
     public function __construct()
     {
 
-        $this->middleware('auth:api');
+        $this->middleware('auth:api', ['except' => ['generate']]);
         
+    }
+
+    public function getAuthUser() {
         $user = auth()->user();
-        $this->user_id = $user->id;
+        return $user->id;
     }
 
     /**
      * This will issue a new ticket and will be given to the customer
-     * This method is only available to the user ticket issuer
+     * This method is open to anyone
      */
-    public function issue(Request $request)
+    public function generate(Request $request)
     {
         $request->validate([
             'priority' => 'required|integer'
@@ -41,14 +43,31 @@ class TicketsController extends Controller
 
         $data = [
             'ticket_number' => $ticket_number,
-            'name' => $request->input('name'),
             'priority' => $request->input('priority'),
             'date_issued' => $now
         ];
 
+
         $ticket = Tickets::create($data);
 
-        return response()->json(['payload' => $ticket],201);
+        $getPeopleinWating = Tickets::where([
+            ['status', '=', 0],
+            ['id', '!=', $ticket->id]
+        ])->count();
+
+        $estimatedWaitingTime = 10;
+
+        $payload = [
+            'id' => $ticket->id,
+            'date_issed' => $ticket->date_issued,
+            'created_at' => $ticket->created_at,
+            'priority' => $ticket->priority,
+            'ticket_number' => $ticket->ticket_number,
+            'people_in_waiting' => $getPeopleinWating,
+            'estimated_waiting_time' => $estimatedWaitingTime
+        ];
+
+        return response()->json(compact('payload'),201);
     }
 
     /**
@@ -84,10 +103,12 @@ class TicketsController extends Controller
         
         $ticketStatus = $tickets->status;
 
+        $user_id = $this->getAuthUser();
+
         if($ticketStatus === 0)
         {
             //Get the latest current user transaction
-            $checkUserCurrentTransaction = TicketsUsers::where(['user_id' => $this->user_id])->latest()->first();
+            $checkUserCurrentTransaction = TicketsUsers::where(['user_id' => $user_id])->latest()->first();
             $userCurrentTicketStatus = isset($checkUserCurrentTransaction->status) ? $checkUserCurrentTransaction->status  : 0;
             if($userCurrentTicketStatus === 1 || $userCurrentTicketStatus === 2)
             {
@@ -97,7 +118,7 @@ class TicketsController extends Controller
             $now = Carbon::now();
 
             $ticketUserData = [
-                'user_id' => $this->user_id,
+                'user_id' => $user_id,
                 'ticket_id' => $request->input('ticket_id'),
                 'status' => 1,
                 'complete_time' => $now
@@ -131,16 +152,18 @@ class TicketsController extends Controller
 
         $ticketStatus = $tickets->status;
 
+        $user_id = $this->getAuthUser();
+
         if($ticketStatus === 1)
         {
-            $checkTicketOwner = TicketsUsers::where(['ticket_id' => $ticket_id, 'status' => 1, 'user_id' => $this->user_id])->count();
+            $checkTicketOwner = TicketsUsers::where(['ticket_id' => $ticket_id, 'status' => 1, 'user_id' => $user_id])->count();
 
             if($checkTicketOwner > 0)
             {
                 $now = Carbon::now();
                 $data = [
                     'ticket_id' => $ticket_id,
-                    'user_id' => $this->user_id,
+                    'user_id' => $user_id,
                     'complete_time' => $now,
                     'status' => 2
                 ];
@@ -175,16 +198,18 @@ class TicketsController extends Controller
 
         $ticketStatus = $tickets->status;
 
+        $user_id = $this->getAuthUser();
+
         if($ticketStatus === 2)
         {
-            $checkTicketOwner = TicketsUsers::where(['ticket_id' => $ticket_id, 'status' => 2, 'user_id' => $this->user_id])->count();
+            $checkTicketOwner = TicketsUsers::where(['ticket_id' => $ticket_id, 'status' => 2, 'user_id' => $user_id])->count();
 
             if($checkTicketOwner > 0)
             {
                 $now = Carbon::now();
                 $data = [
                     'ticket_id' => $ticket_id,
-                    'user_id' => $this->user_id,
+                    'user_id' => $user_id,
                     'complete_time' => $now,
                     'status' => 3
                 ];
@@ -218,16 +243,18 @@ class TicketsController extends Controller
 
         $ticketStatus = $tickets->status;
 
+        $user_id = $this->getAuthUser();
+
         if($ticketStatus === 1)
         {
-            $checkTicketOwner = TicketsUsers::where(['ticket_id' => $ticket_id, 'status' => 1, 'user_id' => $this->user_id])->count();
+            $checkTicketOwner = TicketsUsers::where(['ticket_id' => $ticket_id, 'status' => 1, 'user_id' => $user_id])->count();
 
             if($checkTicketOwner > 0)
             {
                 $now = Carbon::now();
                 $data = [
                     'ticket_id' => $ticket_id,
-                    'user_id' => $this->user_id,
+                    'user_id' => $user_id,
                     'complete_time' => $now,
                     'status' => 0
                 ];
@@ -261,9 +288,11 @@ class TicketsController extends Controller
 
         $ticketStatus = $tickets->status;
 
+        $user_id = $this->getAuthUser();
+
         if($ticketStatus > 0)
         {
-            $checkTicketOwner = TicketsUsers::where(['ticket_id' => $ticket_id, 'user_id' => $this->user_id])
+            $checkTicketOwner = TicketsUsers::where(['ticket_id' => $ticket_id, 'user_id' => $user_id])
             ->whereBetween('status', [1,2])
             ->count();
 
@@ -272,7 +301,7 @@ class TicketsController extends Controller
                 $now = Carbon::now();
                 $data = [
                     'ticket_id' => $ticket_id,
-                    'user_id' => $this->user_id,
+                    'user_id' => $user_id,
                     'complete_time' => $now,
                     'status' => 4
                 ];
