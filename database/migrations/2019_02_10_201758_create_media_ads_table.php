@@ -15,10 +15,11 @@ class CreateMediaAdsTable extends Migration
     {
         Schema::create('media_ads', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('media_path', 250)->default('default.jpg');
-            $table->string('alt_text', 150)->default("This is an alt text");
+            $table->string('source', 250);
+            $table->string('media_type', 50)->default('video/mp4');
             $table->integer('weight')->default(1);
             $table->smallInteger('visibility')->default(1);
+            $table->string('title', 150)->nullable();
             $table->timestamps();
         });
     }
