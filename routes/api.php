@@ -75,3 +75,6 @@ Route::post('/tickets/complete', 'TicketsController@complete');
 Route::post('/tickets/backToQueue', 'TicketsController@backToQueue');
 
 Route::post('/tickets/stop', 'TicketsController@stop');
+
+
+Route::get('/media/files', 'MediaController@getMedia');

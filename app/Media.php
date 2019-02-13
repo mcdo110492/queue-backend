@@ -9,8 +9,10 @@ class Media extends Model
     protected $table = "media_ads";
 
     protected $fillable = [
-        'media_path',
+        'source',
+        'media_type',
+        'visibility',
         'weight',
-        'visibility'
+        'title'
     ];
 }

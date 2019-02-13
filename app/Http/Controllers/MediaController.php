@@ -9,18 +9,23 @@ use App\Media;
 class MediaController extends Controller
 {
     
-    public function getImages(){
+    public function getMedia(){
         
-        $medias = Media::where('visibility','=',1)->get();
+        $medias = Media::where('visibility','=',1)->orderBy('weight','asc')->get();
         $data = [];
         foreach ($medias as $media) {
-           $mediaUrl = Storage::url($media->media_path);
+           $mediaUrl = "http://localhost:8000/storage/$media->source"; //Storage::disk('public')->url($media->media_path); 
            $data[] = [
-               'media_path' => $mediaUrl,
                'id' => $media->id,
-               'weight' => $media->weight
+               'src' => $mediaUrl,
+               'title' => $media->title,
+               'type' => $media->media_type
            ];
         }
+
+        $payload = $data;
+
+        return response()->json(compact('payload'), 200);
 
     }
 }

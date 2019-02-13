@@ -15,11 +15,8 @@ class SettingsDisplaySeeder extends Seeder
     {
         $now = Carbon::now();
         $data = [
-            'priority_ticket_color' => 'red',
-            'normal_ticket_color' => 'blue',
-            'time_format' => '12 Hours',
-            'date_format' => 'mm dd yyyy',
-            'display_mode' => 'Display Mode 1'
+            'display_mode' => 'Display Mode 1',
+            'slider_type' => 'image'
         ];
 
         DB::table('settings_display')->insert([
