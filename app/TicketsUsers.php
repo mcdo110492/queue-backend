@@ -25,4 +25,11 @@ class TicketsUsers extends Model
     {
         return $this->belongsTo('App\Tickets', 'ticket_id');
     }
+
+    public function scopeByUser($query, $id){
+
+        return $query->where('user_id',$id);
+    }
+
+
 }

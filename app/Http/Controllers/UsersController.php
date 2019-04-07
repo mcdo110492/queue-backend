@@ -19,7 +19,7 @@ class UsersController extends Controller
     
     public function getUsers()
     {
-        $get = User::where('role','!=', 1)->get();
+        $get = User::get();
 
         return response()->json(['payload' => ['data' => $get]]);
     }

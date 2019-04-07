@@ -15,10 +15,12 @@ class Tickets extends Model
         'date_issued'
     ];
 
-    public function ticket_user()
+    public function logs()
     {
         return $this->hasMany('App\TicketsUsers', 'ticket_id');
     }
+
+
 
     
 }
