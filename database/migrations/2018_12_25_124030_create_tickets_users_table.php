@@ -18,10 +18,19 @@ class CreateTicketsUsersTable extends Migration
             $table->integer('ticket_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->smallInteger('status');
-            $table->string('served_time',20)->default("00:00");
+            $table->string('served_time',20)->nullable();
             $table->dateTime('complete_time');
             $table->timestamps();
         });
+
+        /**
+         * Ticket Status
+         * 0 - Pending / Back To Queue
+         * 1 - Called
+         * 2 - Serving
+         * 3 - Completed /Finished
+         * 4 - Stopped
+         */
     }
 
     /**

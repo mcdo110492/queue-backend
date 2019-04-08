@@ -21,6 +21,15 @@ class CreateTicketsTable extends Migration
             $table->date('date_issued');
             $table->timestamps();
         });
+
+        /**
+         * Ticket Status
+         * 0 - Pending / Back To Queue
+         * 1 - Called
+         * 2 - Serving
+         * 3 - Completed /Finished
+         * 4 - Stopped
+         */
     }
 
     /**

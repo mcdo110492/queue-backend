@@ -65,6 +65,8 @@ Route::post('/tickets/backToQueue', 'TicketsController@backToQueue');
 
 Route::post('/tickets/stop', 'TicketsController@stop');
 
+Route::get('/tickets/last/user/transaction', 'TicketsController@getUserLastTransaction');
+
 Route::get('/tickets/user/logs', 'TicketsController@getUserCurrentLogs');
 
 

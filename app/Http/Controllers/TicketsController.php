@@ -119,7 +119,7 @@ class TicketsController extends Controller
             $userCurrentTicketStatus = isset($checkUserCurrentTransaction->status) ? $checkUserCurrentTransaction->status  : 0;
             if($userCurrentTicketStatus === 1 || $userCurrentTicketStatus === 2)
             {
-                return response()->json(['payload' => 'Unable to call this ticket. You still have other ticket to process or complete'], 403);
+                return response()->json(['payload' => 'Unable to call this token. You still have other token to process or complete'], 403);
             }
 
             $now = Carbon::now();
@@ -135,18 +135,16 @@ class TicketsController extends Controller
             $tickets->update(['status' => 1]);
 
             $ticketUser = TicketsUsers::create($ticketUserData);
-
-            $data = TicketsUsers::with('ticket')->byUser($user_id)->get()->first();
             
-            $message = 'You called this ticket';
+            $message = 'You called this token';
 
-            $payload = compact('message','data');
+            $payload = compact('message');
 
             return response()->json(compact('payload'), 200);
             
         }
 
-        $payload = ['message' => 'This ticket already been called'];
+        $payload = ['message' => 'This token already been called'];
         
         return response()->json(compact('payload'), 403);
     }
@@ -169,7 +167,7 @@ class TicketsController extends Controller
         $user_id = $this->getAuthUser();
 
 
-        $checkTicketBelongToUser = TicketsUsers::where(['ticket_id' => $tickets->id, 'user_id' => $user_id])->latest()->first()->count();
+        $checkTicketBelongToUser = TicketsUsers::where(['ticket_id' => $tickets->id, 'user_id' => $user_id])->count();
 
         if($checkTicketBelongToUser > 0)
         {
@@ -186,17 +184,15 @@ class TicketsController extends Controller
             $tickets->update(['status' => 1]);
 
             $ticketUser = TicketsUsers::create($ticketUserData);
-
-            $data = TicketsUsers::with('ticket')->byUser($user_id)->get();
             
-            $message = 'You again called this ticket';
+            $message = 'You again called this token';
 
-            $payload = compact('message','data');
+            $payload = compact('message');
 
             return response()->json(compact('payload'), 200);
         }
 
-        $payload = ['message' => 'This ticket does not belongs to you'];
+        $payload = ['message' => 'This token does not belongs to you'];
 
         return response()->json(compact('payload'),403);
     }
@@ -240,25 +236,23 @@ class TicketsController extends Controller
                 $tickets->update(['status' => 2]);
 
                 $ticketUser = TicketsUsers::create($ticketUserData);
-
-                $data = TicketsUsers::where(['id' => $ticketUser->id])->with('ticket')->byUser($user_id)->get();
                 
-                $message = 'You currently serving/process this ticket';
+                $message = 'You currently serving/process this token';
     
-                $payload = compact('message','data');
+                $payload = compact('message');
     
                 return response()->json(compact('payload'), 200);
 
             }
 
-            $message = 'This ticket has been called by other user';
+            $message = 'This token has been called by other user';
     
             $payload = compact('message');
 
             return response()->json(compact('payload'), 403);
         }
 
-        $message = 'This ticket already been served/process';
+        $message = 'This token already been served/process';
     
         $payload = compact('message');
 
@@ -305,25 +299,87 @@ class TicketsController extends Controller
                 $tickets->update(['status' => 3]);
 
                 $ticketUser = TicketsUsers::create($ticketUserData);
-
-                $data = TicketsUsers::with('ticket')->byUser($user_id)->get();
                 
-                $message = 'This ticket is finish/complete';
+                $message = 'This token is finish/complete';
     
-                $payload = compact('message','data');
+                $payload = compact('message');
     
                 return response()->json(compact('payload'), 200);
 
             }
 
-            $message = 'This ticket already been finished/completed by other user';
+            $message = 'This token already been finished/completed by other user';
     
             $payload = compact('message');
 
             return response()->json(compact('payload'), 403);
         }
 
-        $message = 'This ticket already been finished/completed';
+        $message = 'This token already been finished/completed';
+    
+        $payload = compact('message');
+
+        return response()->json(compact('payload'), 403);
+    }
+
+     /**
+     * This will stop the ticket
+     * This will validate and restrict if you are not the user who previously called or process this ticket
+     * In other words you need to call or process this ticket
+     */
+    public function stop(Request $request)
+    {
+        $request->validate([
+            'ticket_id' => 'required|integer',
+            'served_time' => 'required'
+        ]);
+
+        $ticket_id = $request->input('ticket_id');
+        $served_time = $request->input('served_time');
+
+        $tickets = Tickets::findOrFail($ticket_id);
+
+        $ticketStatus = $tickets->status;
+
+        $user_id = $this->getAuthUser();
+
+        if($ticketStatus > 0)
+        {
+            $checkTicketOwner = TicketsUsers::where(['ticket_id' => $ticket_id, 'user_id' => $user_id])
+            ->whereBetween('status', [1,2])
+            ->count();
+
+            if($checkTicketOwner > 0)
+            {
+                $now = Carbon::now();
+                $ticketUserData = [
+                    'ticket_id' => $ticket_id,
+                    'user_id' => $user_id,
+                    'complete_time' => $now,
+                    'served_time' => $served_time,
+                    'status' => 4
+                ];
+
+                $tickets->update(['status' => 4]);
+
+                $ticketUser = TicketsUsers::create($ticketUserData);
+                
+                $message = 'You stopped/cancelled this token';
+    
+                $payload = compact('message');
+    
+                return response()->json(compact('payload'), 200);
+
+            }
+
+            $message = 'This token has been called or process by other user';
+    
+            $payload = compact('message');
+
+            return response()->json(compact('payload'), 403);
+        }
+
+        $message = 'Unable to stop this token. You need to call or process it first';
     
         $payload = compact('message');
 
@@ -369,95 +425,40 @@ class TicketsController extends Controller
                 $tickets->update(['status' => 0]);
 
                 $ticketUser = TicketsUsers::create($ticketUserData);
-
-                $data = TicketsUsers::with('ticket')->byUser($user_id)->get();
                 
-                $message = 'This ticket has been back to Queue List';
+                $message = 'This token has been back to Queue List';
     
-                $payload = compact('message','data');
+                $payload = compact('message', 'served_time');
     
                 return response()->json(compact('payload'), 200);
             }
 
-            $message = 'This ticket has been called by other user';
+            $message = 'This token has been called by other user';
     
             $payload = compact('message');
 
             return response()->json(compact('payload'), 403);
         }
 
-        $message = 'Unable to back this ticket to Queue List';
+        $message = 'Unable to back this token to Queue List';
     
         $payload = compact('message');
 
         return response()->json(compact('payload'), 403);
     }
 
-    /**
-     * This will stop the ticket
-     * This will validate and restrict if you are not the user who previously called or process this ticket
-     * In other words you need to call or process this ticket
-     */
-    public function stop(Request $request)
-    {
-        $request->validate([
-            'ticket_id' => 'required|integer',
-            'served_time' => 'required'
-        ]);
-
-        $ticket_id = $request->input('ticket_id');
-        $served_time = $request->input('served_time');
-
-        $tickets = Tickets::findOrFail($ticket_id);
-
-        $ticketStatus = $tickets->status;
-
+    public function getUserLastTransaction(){
         $user_id = $this->getAuthUser();
 
-        if($ticketStatus > 0)
-        {
-            $checkTicketOwner = TicketsUsers::where(['ticket_id' => $ticket_id, 'user_id' => $user_id])
-            ->whereBetween('status', [1,2])
-            ->count();
+        $token = TicketsUsers::with('ticket')->where(['user_id' => $user_id])->latest()->first();
 
-            if($checkTicketOwner > 0)
-            {
-                $now = Carbon::now();
-                $ticketUserData = [
-                    'ticket_id' => $ticket_id,
-                    'user_id' => $user_id,
-                    'complete_time' => $now,
-                    'served_time' => $served_time,
-                    'status' => 4
-                ];
+        $payload = ['token' => $token];
 
-                $tickets->update(['status' => 4]);
+        return response()->json($payload, 200);
 
-                $ticketUser = TicketsUsers::create($ticketUserData);
-
-                $data = TicketsUsers::with('ticket')->byUser($user_id)->get();
-                
-                $message = 'You stopped/cancelled this ticket';
-    
-                $payload = compact('message','data');
-    
-                return response()->json(compact('payload'), 200);
-
-            }
-
-            $message = 'This ticket has been called or process by other user';
-    
-            $payload = compact('message');
-
-            return response()->json(compact('payload'), 403);
-        }
-
-        $message = 'Unable to stop this ticket. You need to call or process it first';
-    
-        $payload = compact('message');
-
-        return response()->json(compact('payload'), 403);
     }
+
+   
 
     public function getUserCurrentLogs()
     {
