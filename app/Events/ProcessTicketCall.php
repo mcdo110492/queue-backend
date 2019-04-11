@@ -10,6 +10,8 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+use App\Tickets;
+
 class ProcessTicketCall implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -19,17 +21,11 @@ class ProcessTicketCall implements ShouldBroadcast
      *
      * @return void
      */
-    public $id;
-    public $ticket_number;
-    public $priority;
-    public $counter_name;
+    public $token;
 
-    public function __construct($id, $ticket_number, $priority, $counter_name)
+    public function __construct(Tickets $ticket)
     {
-        $this->id = $id;
-        $this->ticket_number = $ticket_number;
-        $this->priority = $priority;
-        $this->counter_name = $counter_name;
+        $this->token = $ticket;
     }
 
     /**
@@ -39,6 +35,6 @@ class ProcessTicketCall implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('ticket-call');
+        return new PrivateChannel('ticket-call');
     }
 }

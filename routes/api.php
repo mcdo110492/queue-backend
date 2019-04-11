@@ -1,10 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 
-
-
-Route::group(['prefix' => 'auth'], function ($router) {
+Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthenticationJWT@login');
     Route::post('logout', 'AuthenticationJWT@logout');
     Route::post('refresh', 'AuthenticationJWT@refresh');

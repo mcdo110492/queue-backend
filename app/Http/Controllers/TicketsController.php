@@ -8,6 +8,9 @@ use \Tymon\JWTAuth\Exceptions\UserNotDefinedException;
 
 use App\Tickets;
 use App\TicketsUsers;
+use App\UsersCounters;
+
+use App\Events\ProcessTicketCall;
 
 
 class TicketsController extends Controller
@@ -139,6 +142,10 @@ class TicketsController extends Controller
             $message = 'You called this token';
 
             $payload = compact('message');
+
+            $userCounter = UsersCounters::with('counter')->where(['user_id' => $user_id])->first();
+
+            broadcast(new ProcessTicketCall($tickets))->toOthers();
 
             return response()->json(compact('payload'), 200);
             
