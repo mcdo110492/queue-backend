@@ -15,25 +15,19 @@ class AnnouncementsController extends Controller
         $this->middleware('auth:api', ['except' => 'getWithPagination']);
     }
 
+    public function getAll(){
 
-    public function getWithPagination(Request $request)
-    {
-        $take = $request->input('take');
-        $page = $request->input('page') - 1;
-        $offset = $take * $page;
-        $order = $request->input('order');
-        $column = $request->input('column');
-        $q = $request->input('q');
+        $get = Announcements::get();
 
-        $count = Announcements::count();
+        return response()->json(['payload' => ['data' => $get]], 200);
+    }
 
-        $get = Announcements::where($column,'LIKE', "%$q%")
-            ->take($take)
-            ->skip($offset)
-            ->orderBy($column, $order)
-            ->get();
 
-        return response()->json(['payload' => ['count' => $count, 'data' => $get]], 200);
+    public function getAllVisible(){
+       
+        $get = Announcements::where('visibility','=',1)->orderBy('weight','ASC')->get();
+
+        return response()->json(['payload' => ['data' => $get]], 200);
     }
 
     public function store(Request $request)

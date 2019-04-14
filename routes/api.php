@@ -20,7 +20,9 @@ Route::post('/users/reset/password', 'UsersController@resetPassword');
 
 
 
-Route::get('/announcements', 'AnnouncementsController@getWithPagination');
+Route::get('/announcements', 'AnnouncementsController@getAll');
+
+Route::get('/announcements/visible', 'AnnouncementsController@getAllVisible');
 
 Route::post('/announcements', 'AnnouncementsController@store');
 
