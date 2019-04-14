@@ -10,22 +10,19 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-use App\Tickets;
-
-class ProcessTicketCall implements ShouldBroadcast
+class ProcessTicketBackToQueue implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $id;
+
+    public $priority;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public $id;
-
-    public $priority;
-
-
     public function __construct($id, $priority)
     {
         $this->id = $id;
@@ -40,6 +37,6 @@ class ProcessTicketCall implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('ticket-call');
+        return new PrivateChannel('ticket-back-to-queue');
     }
 }

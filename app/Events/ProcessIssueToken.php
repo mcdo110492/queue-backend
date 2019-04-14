@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 use App\Tickets;
 
-class ProcessTicketCall implements ShouldBroadcast
+class ProcessIssueToken implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,16 +21,12 @@ class ProcessTicketCall implements ShouldBroadcast
      *
      * @return void
      */
-    public $id;
 
-    public $priority;
+    public $token;
 
-
-    public function __construct($id, $priority)
+    public function __construct($token)
     {
-        $this->id = $id;
-
-        $this->priority = $priority;
+        $this->token = $token;
     }
 
     /**
@@ -40,6 +36,6 @@ class ProcessTicketCall implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('ticket-call');
+        return new PrivateChannel('issue-ticket');
     }
 }

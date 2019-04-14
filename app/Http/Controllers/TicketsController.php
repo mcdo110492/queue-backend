@@ -10,8 +10,6 @@ use App\Tickets;
 use App\TicketsUsers;
 use App\UsersCounters;
 
-use App\Events\ProcessTicketCall;
-
 
 class TicketsController extends Controller
 {
@@ -70,6 +68,8 @@ class TicketsController extends Controller
             'people_in_waiting' => $getPeopleinWating,
             'estimated_waiting_time' => $estimatedWaitingTime
         ];
+
+        event(new \App\Events\ProcessIssueToken($ticket));
 
         return response()->json(compact('payload'),201);
     }
@@ -143,9 +143,7 @@ class TicketsController extends Controller
 
             $payload = compact('message');
 
-            $userCounter = UsersCounters::with('counter')->where(['user_id' => $user_id])->first();
-
-            broadcast(new ProcessTicketCall($tickets))->toOthers();
+            broadcast(new \App\Events\ProcessTicketCall($tickets->id, $tickets->priority))->toOthers();
 
             return response()->json(compact('payload'), 200);
             
@@ -432,10 +430,12 @@ class TicketsController extends Controller
                 $tickets->update(['status' => 0]);
 
                 $ticketUser = TicketsUsers::create($ticketUserData);
+
+                broadcast(new \App\Events\ProcessTicketBackToQueue($tickets->id, $tickets->priority))->toOthers();
                 
                 $message = 'This token has been back to Queue List';
     
-                $payload = compact('message', 'served_time');
+                $payload = compact('message');
     
                 return response()->json(compact('payload'), 200);
             }
