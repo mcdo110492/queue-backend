@@ -145,6 +145,8 @@ class TicketsController extends Controller
 
             broadcast(new \App\Events\ProcessTicketCall($tickets->id, $tickets->priority))->toOthers();
 
+            event(new \App\Events\DisplayNowServing($tickets->id));
+
             return response()->json(compact('payload'), 200);
             
         }
@@ -189,6 +191,8 @@ class TicketsController extends Controller
             $tickets->update(['status' => 1]);
 
             $ticketUser = TicketsUsers::create($ticketUserData);
+
+            event(new \App\Events\DisplayNowServing($tickets->id));
             
             $message = 'You again called this token';
 

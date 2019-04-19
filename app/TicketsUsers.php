@@ -32,6 +32,11 @@ class TicketsUsers extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
+    public function userCounter()
+    {
+        return $this->belongsTo('App\UsersCounters','user_id', 'user_id');
+    }
+
     public function ticket()
     {
         return $this->belongsTo('App\Tickets', 'ticket_id');

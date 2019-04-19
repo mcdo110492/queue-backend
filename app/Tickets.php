@@ -23,9 +23,14 @@ class Tickets extends Model
         'date_issued'
     ];
 
-    public function logs()
+    public function user()
     {
         return $this->hasMany('App\TicketsUsers', 'ticket_id');
+    }
+
+    public function latestUser(){
+
+        return $this->hasOne('App\TicketsUsers', 'ticket_id')->latest();
     }
 
 
