@@ -35,15 +35,13 @@ class AnnouncementsController extends Controller
         
         //Validate data through request valide method
         $request->validate([
-            'title' => 'required|max:50',
-            'details' => 'required|max:200',
+            'message' => 'required|max:250',
             'weight' => 'required|integer',
             'visibility' => 'required|integer'
         ]);
         
         $validatedData = [
-            'title' => $request->input('title'),
-            'details' => $request->input('details'),
+            'message' => $request->input('message'),
             'weight' => $request->input('weight'),
             'visibility' => $request->input('visibility')
         ];
@@ -58,16 +56,14 @@ class AnnouncementsController extends Controller
         $announcement = Announcements::findOrFail($id);
 
         $request->validate([
-            'title' => 'required|max:50',
-            'details' => 'required|max:200',
+            'message' => 'required|max:250',
             'weight' => 'required|integer',
             'visibility' => 'required|integer'
         ]);
 
         
         $validatedData = [
-            'title' => $request->input('title'),
-            'details' => $request->input('details'),
+            'message' => $request->input('message'),
             'weight' => $request->input('weight'),
             'visibility' => $request->input('visibility')
         ];

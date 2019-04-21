@@ -9,8 +9,7 @@ class Announcements extends Model
     protected $table = 'announcements';
 
     protected $fillable = [
-        'title',
-        'details',
+        'message',
         'visibility',
         'weight'
     ];
