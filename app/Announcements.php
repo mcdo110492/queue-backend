@@ -11,7 +11,6 @@ class Announcements extends Model
     protected $fillable = [
         'title',
         'details',
-        'schedule_date',
         'visibility',
         'weight'
     ];

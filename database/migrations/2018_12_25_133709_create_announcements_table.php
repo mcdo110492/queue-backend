@@ -18,7 +18,6 @@ class CreateAnnouncementsTable extends Migration
             $table->string('title');
             $table->string('details');
             $table->string('weight')->default(0);
-            $table->dateTime('schedule_date')->nullable();
             $table->smallInteger('visibility')->default(0);
             $table->timestamps();
         });

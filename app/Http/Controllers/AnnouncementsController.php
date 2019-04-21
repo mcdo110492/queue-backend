@@ -12,7 +12,7 @@ class AnnouncementsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => 'getWithPagination']);
+        $this->middleware('auth:api', ['except' => ['getAll', 'getAllVisible']]);
     }
 
     public function getAll(){
@@ -38,19 +38,14 @@ class AnnouncementsController extends Controller
             'title' => 'required|max:50',
             'details' => 'required|max:200',
             'weight' => 'required|integer',
-            'schedule_date' => 'date|nullable',
             'visibility' => 'required|integer'
         ]);
-        $schedule_date_input = $request->input('schedule_date');
-
-        $schedule_date = ($schedule_date_input != null) ? Carbon::parse($schedule_date_input) : NULL;
         
         $validatedData = [
             'title' => $request->input('title'),
             'details' => $request->input('details'),
             'weight' => $request->input('weight'),
-            'visibility' => $request->input('visibility'),
-            'schedule_date' => $schedule_date
+            'visibility' => $request->input('visibility')
         ];
 
         $create = Announcements::create($validatedData);
@@ -66,19 +61,15 @@ class AnnouncementsController extends Controller
             'title' => 'required|max:50',
             'details' => 'required|max:200',
             'weight' => 'required|integer',
-            'schedule_date' => 'date|nullable',
             'visibility' => 'required|integer'
         ]);
 
-        $schedule_date_input = $request->input('schedule_date');
-        $schedule_date = ($schedule_date_input != null) ? Carbon::parse($schedule_date_input) : NULL;
         
         $validatedData = [
             'title' => $request->input('title'),
             'details' => $request->input('details'),
             'weight' => $request->input('weight'),
-            'visibility' => $request->input('visibility'),
-            'schedule_date' => $schedule_date
+            'visibility' => $request->input('visibility')
         ];
 
         $announcement->update($validatedData);
