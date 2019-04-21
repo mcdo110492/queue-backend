@@ -28,6 +28,8 @@ Route::post('/announcements', 'AnnouncementsController@store');
 
 Route::put('/announcements/{id}', 'AnnouncementsController@update');
 
+Route::post('/announcements/validate', 'AnnouncementsController@checkUniqueValue');
+
 
 Route::get('/counters', 'CountersController@getAll');
 

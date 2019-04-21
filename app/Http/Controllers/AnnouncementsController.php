@@ -30,6 +30,19 @@ class AnnouncementsController extends Controller
         return response()->json(['payload' => ['data' => $get]], 200);
     }
 
+    public function checkUniqueValue(Request $request)
+    {
+        $field = $request->input('field');
+        $value = $request->input('value');
+        $id = $request->input('id');
+
+        $table = 'announcements';
+
+        $validate = $this->validateUniqueValue($table, $field, $value, $id);
+
+        return response()->json($validate, $validate['status']);
+    }
+
     public function store(Request $request)
     {
         
@@ -48,7 +61,7 @@ class AnnouncementsController extends Controller
 
         $create = Announcements::create($validatedData);
 
-        return response()->json(['payload' => $create], 201);
+        return response()->json(['payload' => ['data' => $create]], 201);
     }
 
     public function update(Request $request, $id)
@@ -72,6 +85,6 @@ class AnnouncementsController extends Controller
 
         $updatedData = Announcements::findOrFail($id);
 
-        return response()->json(['payload' => $updatedData], 200);
+        return response()->json(['payload' => ['data' => $updatedData]], 200);
     }
 }
