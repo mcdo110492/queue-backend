@@ -40,8 +40,8 @@ class DepartmentsController extends Controller
     {
         
         $request->validate([
-            'name' => 'required|max:50|unique:departments,name',
-            'code' => 'required|integer|unique:departments,code'
+            'name' => 'required|max:255|unique:departments,name',
+            'code' => 'required|max:50|unique:departments,code'
         ]);
         
         $validatedData = [
@@ -59,8 +59,8 @@ class DepartmentsController extends Controller
         $department = Departments::findOrFail($id);
 
         $request->validate([
-            'name' => "required|max:50|unique:departments,name,$id",
-            'code' => "required|integer|unique:departments,code,$id"
+            'name' => "required|max:255|unique:departments,name,$id",
+            'code' => "required|max:50|unique:departments,code,$id"
         ]);
 
         $validatedData = [
