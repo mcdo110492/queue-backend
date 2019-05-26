@@ -18,7 +18,7 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 });
 
 
-Broadcast::channel('ticket-call', function() {
+Broadcast::channel('ticket-call.{department_id}', function() {
 
     $token = auth()->user();
 
@@ -26,7 +26,7 @@ Broadcast::channel('ticket-call', function() {
 
 });
 
-Broadcast::channel('ticket-back-to-queue', function() {
+Broadcast::channel('ticket-back-to-queue.{department_id}', function() {
 
     $token = auth()->user();
 
@@ -34,7 +34,7 @@ Broadcast::channel('ticket-back-to-queue', function() {
 });
 
 
-Broadcast::channel('issue-ticket', function() {
+Broadcast::channel('issue-ticket.{department_id}', function() {
 
     $token = auth()->user();
 

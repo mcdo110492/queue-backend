@@ -25,6 +25,11 @@ class CountersController extends Controller
         return response()->json(['payload' => ['count' => $count, 'data' => $get]], 200);
     }
 
+    public function getByDepartment($department_id){
+        $get = Counters::where('department_id','=',$department_id)->get();
+        return response()->json(['payload' => ['data' => $get]], 200);
+    }
+
    
 
     public function store(Request $request)

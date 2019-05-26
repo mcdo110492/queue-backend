@@ -16,9 +16,9 @@ class UsersCountersController extends Controller
 
     public function getAll() {
         
-        $count = UsersCounters::count();
-        $get = UsersCounters::with(['user','counter'])->get();
-        return response()->json(['payload' => ['count' => $count, 'data' => $get]], 200);
+        $get = UsersCounters::with(['user','counter.department'])->get();
+
+        return response()->json(['payload' => ['data' => $get]], 200);
 
     }
 
@@ -50,7 +50,7 @@ class UsersCountersController extends Controller
 
         $create = UsersCounters::create($validatedData);
 
-        $data = UsersCounters::with(['user','counter'])->findOrFail($create->id);
+        $data = UsersCounters::with(['user','counter.department'])->findOrFail($create->id);
 
         return response()->json(['payload' => ['data' => $data]], 201);
     }
@@ -71,7 +71,7 @@ class UsersCountersController extends Controller
 
         $counter->update($validatedData);
 
-        $updatedData = UsersCounters::with(['user','counter'])->findOrFail($id);
+        $updatedData = UsersCounters::with(['user','counter.department'])->findOrFail($id);
 
         return response()->json(['payload' => [ 'data' => $updatedData ]], 200);
     }

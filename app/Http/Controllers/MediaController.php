@@ -15,10 +15,9 @@ class MediaController extends Controller
         $medias = Media::where('visibility','=',1)->orderBy('weight','asc')->get();
         $data = [];
         foreach ($medias as $media) {
-           $mediaUrl =  Storage::disk('public')->url($media->source); 
            $data[] = [
                'id' => $media->id,
-               'src' => $mediaUrl,
+               'src' => $media->source,
                'title' => $media->title,
                'type' => $media->media_type
            ];

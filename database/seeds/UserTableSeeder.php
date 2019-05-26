@@ -23,32 +23,13 @@ class UserTableSeeder extends Seeder
 
         DB::table('users')->insert([
             'name' => 'Administrator',
-            'email' => 'administrator@email.com',
             'username' => 'admin',
             'password' => Hash::make('admin'),
             'role' => 1,
+            'department_id' => 0,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
 
-        DB::table('users')->insert([
-            'name' => 'Jane Doe',
-            'email' => 'janedoe@email.com',
-            'username' => 'janedoe',
-            'password' => Hash::make('janedoe'),
-            'role' => 2,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
-
-        DB::table('users')->insert([
-            'name' => 'John Doe',
-            'email' => 'johndoe@email.com',
-            'username' => 'johndoe',
-            'password' => Hash::make('johndoe'),
-            'role' => 2,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
     }
 }

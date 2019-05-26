@@ -25,12 +25,16 @@ class ProcessTicketCall implements ShouldBroadcast
 
     public $priority;
 
+    public $department_id;
 
-    public function __construct($id, $priority)
+
+    public function __construct($id, $priority, $department_id)
     {
         $this->id = $id;
 
         $this->priority = $priority;
+
+        $this->department_id = $department_id;
     }
 
     /**
@@ -40,6 +44,6 @@ class ProcessTicketCall implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('ticket-call');
+        return new PrivateChannel("ticket-call.$this->department_id");
     }
 }

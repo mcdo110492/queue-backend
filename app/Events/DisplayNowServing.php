@@ -25,7 +25,7 @@ class DisplayNowServing implements ShouldBroadcast
      */
     public function __construct($id)
     {
-        $this->token = Tickets::with('latestUser.userCounter.counter')->findOrFail($id);
+        $this->token = Tickets::with('latestUser.userCounter.counter.department')->findOrFail($id);
     }
 
     /**

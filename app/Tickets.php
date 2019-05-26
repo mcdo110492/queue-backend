@@ -20,7 +20,8 @@ class Tickets extends Model
         'ticket_number',
         'priority',
         'status',
-        'date_issued'
+        'date_issued',
+        'department_id'
     ];
 
     public function user()

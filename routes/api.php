@@ -12,7 +12,11 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::get('/users', 'UsersController@getUsers');
 
+Route::get('/users/all/{department_id}', 'UsersController@getAll');
+
 Route::post('/users', 'UsersController@create');
+
+Route::put('/users/{id}', 'UsersController@update');
 
 Route::post('/users/validate', 'UsersController@checkUniqueValue');
 
@@ -42,6 +46,8 @@ Route::put('/departments/{id}', 'DepartmentsController@update');
 
 Route::get('/counters', 'CountersController@getAll');
 
+Route::get('/counters/{department_id}', 'CountersController@getByDepartment');
+
 Route::post('/counters/validate', 'CountersController@checkUniqueValue');
 
 Route::post('/counters', 'CountersController@store');
@@ -49,7 +55,7 @@ Route::post('/counters', 'CountersController@store');
 Route::put('/counters/{id}', 'CountersController@update');
 
 
-Route::get('/counters/users', 'UsersCountersController@getAll');
+Route::get('/counters/users/all', 'UsersCountersController@getAll');
 
 Route::post('/counters/users/validate', 'UsersCountersController@checkUniqueValue');
 

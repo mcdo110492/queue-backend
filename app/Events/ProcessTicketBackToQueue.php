@@ -18,16 +18,20 @@ class ProcessTicketBackToQueue implements ShouldBroadcast
 
     public $priority;
 
+    public $department_id;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($id, $priority)
+    public function __construct($id, $priority, $department_id)
     {
         $this->id = $id;
 
         $this->priority = $priority;
+
+        $this->department_id = $department_id;
     }
 
     /**
@@ -37,6 +41,6 @@ class ProcessTicketBackToQueue implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('ticket-back-to-queue');
+        return new PrivateChannel("ticket-back-to-queue.$this->department_id");
     }
 }

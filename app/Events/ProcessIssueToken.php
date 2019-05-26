@@ -23,10 +23,12 @@ class ProcessIssueToken implements ShouldBroadcast
      */
 
     public $token;
+    public $department_id;
 
-    public function __construct($token)
+    public function __construct($token, $department_id)
     {
         $this->token = $token;
+        $this->department_id = $department_id;
     }
 
     /**
@@ -36,6 +38,6 @@ class ProcessIssueToken implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('issue-ticket');
+        return new PrivateChannel("issue-ticket.$this->department_id");
     }
 }

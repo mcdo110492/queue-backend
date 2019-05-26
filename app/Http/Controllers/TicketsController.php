@@ -27,6 +27,11 @@ class TicketsController extends Controller
         return $user->id;
     }
 
+    public function getAuthUserDepartment() {
+        $user = auth()->user();
+        return $user->department_id;
+    }
+
     /**
      * This will issue a new ticket and will be given to the customer
      * This method is open to anyone
@@ -34,7 +39,8 @@ class TicketsController extends Controller
     public function generate(Request $request)
     {
         $request->validate([
-            'priority' => 'required|integer'
+            'priority' => 'required|integer',
+            'department_id' => 'required|integer'
         ]);
 
         $now = Carbon::now()->toDateString();
@@ -43,10 +49,13 @@ class TicketsController extends Controller
 
         $ticket_number = $getMaxTicket + 1;
 
+        $department_id = $request->input('department_id');
+
         $data = [
             'ticket_number' => $ticket_number,
             'priority' => $request->input('priority'),
-            'date_issued' => $now
+            'date_issued' => $now,
+            'department_id' => $department_id
         ];
 
 
@@ -69,7 +78,7 @@ class TicketsController extends Controller
             'estimated_waiting_time' => $estimatedWaitingTime
         ];
 
-        event(new \App\Events\ProcessIssueToken($ticket));
+        event(new \App\Events\ProcessIssueToken($ticket, $department_id));
 
         return response()->json(compact('payload'),201);
     }
@@ -84,8 +93,9 @@ class TicketsController extends Controller
         $now = Carbon::now()->toDateString();
 
         $priority = $request->input('priority');
+        $department_id = $this->getAuthUserDepartment();
 
-        $q = Tickets::where(['status' => 0, 'date_issued' => $now]);
+        $q = Tickets::where(['status' => 0, 'date_issued' => $now, 'department_id' => $department_id]);
 
         $data = $q->get();
 
@@ -143,7 +153,7 @@ class TicketsController extends Controller
 
             $payload = compact('message');
 
-            broadcast(new \App\Events\ProcessTicketCall($tickets->id, $tickets->priority))->toOthers();
+            broadcast(new \App\Events\ProcessTicketCall($tickets->id, $tickets->priority, $tickets->department_id))->toOthers();
 
             event(new \App\Events\DisplayNowServing($tickets->id));
 
@@ -435,7 +445,7 @@ class TicketsController extends Controller
 
                 $ticketUser = TicketsUsers::create($ticketUserData);
 
-                broadcast(new \App\Events\ProcessTicketBackToQueue($tickets->id, $tickets->priority))->toOthers();
+                broadcast(new \App\Events\ProcessTicketBackToQueue($tickets->id, $tickets->priority, $tickets->department_id))->toOthers();
                 
                 $message = 'This token has been back to Queue List';
     
