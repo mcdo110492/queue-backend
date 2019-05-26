@@ -13,7 +13,7 @@ class CreateTableDepartments extends Migration
      */
     public function up()
     {
-        Schema::create('table_departments', function (Blueprint $table) {
+        Schema::create('departments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name',255)->unique();
             $table->string('code',20)->unique();
@@ -28,6 +28,6 @@ class CreateTableDepartments extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_departments');
+        Schema::dropIfExists('departments');
     }
 }
