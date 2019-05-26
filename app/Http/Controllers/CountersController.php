@@ -20,40 +20,31 @@ class CountersController extends Controller
     public function getAll()
     {
         $count = Counters::count();
-        $get = Counters::all();
+        $get = Counters::with('department')->get();
 
         return response()->json(['payload' => ['count' => $count, 'data' => $get]], 200);
     }
 
-    public function checkUniqueValue(Request $request)
-    {
-        $field = $request->input('field');
-        $value = $request->input('value');
-        $id = $request->input('id');
-
-        $table = 'counters';
-
-        $validate = $this->validateUniqueValue($table, $field, $value, $id);
-
-        return response()->json($validate, $validate['status']);
-    }
+   
 
     public function store(Request $request)
     {
         
         $request->validate([
-            'counter_name' => 'required|max:50|unique:counters,counter_name',
-            'position' => 'required|integer|unique:counters,position'
+            'department_id' => 'required|integer',
+            'position' => 'required|integer'
         ]);
         
         $validatedData = [
-            'counter_name' => $request->input('counter_name'),
+            'department_id' => $request->input('department_id'),
             'position' => $request->input('position')
         ];
 
         $create = Counters::create($validatedData);
 
-        return response()->json(['payload' => ['data' => $create]], 201);
+        $data = Counters::with('department')->findOrFail($create->id);
+
+        return response()->json(['payload' => ['data' => $data]], 201);
     }
 
     public function update(Request $request, $id)
@@ -61,18 +52,18 @@ class CountersController extends Controller
         $counter = Counters::findOrFail($id);
 
         $request->validate([
-            'counter_name' => "required|max:50|unique:counters,counter_name,$id",
-            'position' => "required|integer|unique:counters,position,$id"
+            'department_id' => "required|integer",
+            'position' => "required|integer"
         ]);
 
         $validatedData = [
-            'counter_name' => $request->input('counter_name'),
+            'department_id' => $request->input('department_id'),
             'position' => $request->input('position')
         ];
 
         $counter->update($validatedData);
 
-        $model = Counters::findOrFail($id);
+        $model = Counters::with('department')->findOrFail($id);
 
         return response()->json([ 'payload' => [ 'data' => $model ]], 200);
     }

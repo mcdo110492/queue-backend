@@ -9,7 +9,12 @@ class Counters extends Model
     protected $table = 'counters';
     
     protected $fillable = [
-        'counter_name',
+        'department_id',
         'position'
     ];
+
+
+    public function department(){
+        return $this->belongsTo('App\Departments');
+    }
 }
