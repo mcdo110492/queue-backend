@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCountersTable extends Migration
+class CreateTableDepartments extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateCountersTable extends Migration
      */
     public function up()
     {
-        Schema::create('counters', function (Blueprint $table) {
+        Schema::create('table_departments', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('department_id')->unsigned();
-            $table->smallInteger('position')->default(0);
+            $table->string('name',255)->unique();
+            $table->string('code',20)->unique();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateCountersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('counters');
+        Schema::dropIfExists('table_departments');
     }
 }

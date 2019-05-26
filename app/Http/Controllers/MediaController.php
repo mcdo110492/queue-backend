@@ -15,7 +15,7 @@ class MediaController extends Controller
         $medias = Media::where('visibility','=',1)->orderBy('weight','asc')->get();
         $data = [];
         foreach ($medias as $media) {
-           $mediaUrl =  "http://localhost:8000/storage/$media->source";//Storage::disk('public')->url($media->source); 
+           $mediaUrl =  Storage::disk('public')->url($media->source); 
            $data[] = [
                'id' => $media->id,
                'src' => $mediaUrl,
@@ -30,24 +30,37 @@ class MediaController extends Controller
 
     }
 
+    public function getAll() {
+        
+        $medias = Media::get();
+
+        $payload = ['data' => $medias];
+
+        return response()->json($payload);
+    }
+
     public function uploadMedia(Request $request)
     {
         $request->validate([
-            'media' => 'required|mimetypes:video/mp4|max:25000'
+            'medias' => 'required|mimetypes:video/mp4|max:25000'
         ]);
 
-        $path = Storage::putFile('public', $request->file('media'));
+        $path = Storage::putFile('public', $request->file('medias'));
 
-        $createData = [
+        $data = [
             'source' => $path,
             'visibility' => 1,
             'weight' => 1,
-            'title' => null
+            'title' => $request->file('medias')->getClientOriginalName()
         ];
 
-        Media::create($createData);
-
-        return response()->json(compact('path'));
+        Media::create($data);
+            
+    
+        
+        $payload = ['message' => "File(s) has been successfully uploaded"];
+        
+        return response()->json(compact('payload'));
     }
 
    

@@ -194,7 +194,7 @@ class TicketsController extends Controller
 
             event(new \App\Events\DisplayNowServing($tickets->id));
             
-            $message = 'You again called this token';
+            $message = 'You recall this token';
 
             $payload = compact('message');
 

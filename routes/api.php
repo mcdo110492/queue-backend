@@ -73,4 +73,6 @@ Route::get('/tickets/user/logs', 'TicketsController@getUserCurrentLogs');
 
 Route::get('/media/files', 'MediaController@getMedia');
 
+Route::get('/media/all', 'MediaController@getAll');
+
 Route::post('/media/files', 'MediaController@uploadMedia');
