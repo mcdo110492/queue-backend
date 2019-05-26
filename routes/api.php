@@ -31,6 +31,15 @@ Route::put('/announcements/{id}', 'AnnouncementsController@update');
 Route::post('/announcements/validate', 'AnnouncementsController@checkUniqueValue');
 
 
+Route::get('/departments', 'DepartmentsController@getAll');
+
+Route::post('/departments/validate', 'DepartmentsController@checkUniqueValue');
+
+Route::post('/departments', 'DepartmentsController@store');
+
+Route::put('/departments/{id}', 'DepartmentsController@update');
+
+
 Route::get('/counters', 'CountersController@getAll');
 
 Route::post('/counters/validate', 'CountersController@checkUniqueValue');
