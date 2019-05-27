@@ -46,8 +46,10 @@ class MediaController extends Controller
 
         $path = Storage::putFile('public', $request->file('medias'));
 
+        $file_name = $this->extractBasename($path);
+
         $data = [
-            'source' => $path,
+            'source' => $file_name,
             'visibility' => 1,
             'weight' => 1,
             'title' => $request->file('medias')->getClientOriginalName()
@@ -60,6 +62,11 @@ class MediaController extends Controller
         $payload = ['message' => "File(s) has been successfully uploaded"];
         
         return response()->json(compact('payload'));
+    }
+
+    private function extractBasename($path) {
+        $extract = \explode("/", $path);
+        return $extract[1];
     }
 
    
