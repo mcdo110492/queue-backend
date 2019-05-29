@@ -17,9 +17,9 @@ class MediaController extends Controller
         foreach ($medias as $media) {
            $data[] = [
                'id' => $media->id,
-               'src' => $media->source,
+               'source' => $media->source,
                'title' => $media->title,
-               'type' => $media->media_type
+               'media_type' => $media->media_type
            ];
         }
 
@@ -35,7 +35,7 @@ class MediaController extends Controller
 
         $payload = ['data' => $medias];
 
-        return response()->json($payload);
+        return response()->json(compact('payload'), 200);
     }
 
     public function uploadMedia(Request $request)
@@ -52,7 +52,7 @@ class MediaController extends Controller
             'source' => $file_name,
             'visibility' => 1,
             'weight' => 1,
-            'title' => $request->file('medias')->getClientOriginalName()
+            'title' => ""
         ];
 
         Media::create($data);
@@ -64,10 +64,38 @@ class MediaController extends Controller
         return response()->json(compact('payload'));
     }
 
+
+    public function updateMeta($id)
+    {
+        $media = Media::findOrFail($id);
+
+        $response = $response->validate([
+            'visibility' => 'required|integer',
+            'weight' => 'required|integer',
+            'title' => 'required|max:150'
+        ]);
+
+        $dataValidated = [
+            'visibility' => $request->input('visibility'),
+            'weight' => $request->input('weight'),
+            'title' => $request->input('title')
+        ];
+
+        $media->update($dataValidated);
+
+        $updatedData = Media::findOrFail($id);
+
+        $payload = ['data' => $updatedData];
+
+        return response()->json($payload, 200);
+    }
+
+
     private function extractBasename($path) {
         $extract = \explode("/", $path);
         return $extract[1];
     }
+
 
    
 }
