@@ -65,14 +65,14 @@ class MediaController extends Controller
     }
 
 
-    public function updateMeta($id)
+    public function updateMeta(Request $request, $id)
     {
         $media = Media::findOrFail($id);
 
-        $response = $response->validate([
+        $response = $request->validate([
             'visibility' => 'required|integer',
             'weight' => 'required|integer',
-            'title' => 'required|max:150'
+            'title' => 'max:150'
         ]);
 
         $dataValidated = [
@@ -87,7 +87,20 @@ class MediaController extends Controller
 
         $payload = ['data' => $updatedData];
 
-        return response()->json($payload, 200);
+        return response()->json(compact('payload'), 200);
+    }
+
+    public function removeFile($id) {
+
+        $media = Media::findOrFail($id);
+
+        Storage::disk('public')->delete($media->source);
+
+        $media->delete();
+
+        $payload = ['status' => 200, 'message' => "Media deleted successfully."];
+
+        return response()->json(compact('payload'), 200);
     }
 
 

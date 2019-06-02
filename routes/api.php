@@ -93,3 +93,5 @@ Route::get('/media/all', 'MediaController@getAll');
 Route::post('/media/files', 'MediaController@uploadMedia');
 
 Route::put('/media/{id}', 'MediaController@updateMeta');
+
+Route::delete('/media/{id}', 'MediaController@removeFile');
