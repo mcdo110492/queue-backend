@@ -34,7 +34,9 @@ class Tickets extends Model
         return $this->hasOne('App\TicketsUsers', 'ticket_id')->latest();
     }
 
-
+    public function department(){
+        return $this->belongsTo('App\Departments', 'department_id');
+    }
 
     
 }

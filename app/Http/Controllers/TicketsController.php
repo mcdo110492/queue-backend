@@ -87,12 +87,11 @@ class TicketsController extends Controller
      * This will get the currently pending tickets 
      * This will depend to the current system date
      */
-    public function getNowPending(Request $request)
+    public function getNowPending()
     {
 
         $now = Carbon::now()->toDateString();
 
-        $priority = $request->input('priority');
         $department_id = $this->getAuthUserDepartment();
 
         $q = Tickets::where(['status' => 0, 'date_issued' => $now, 'department_id' => $department_id]);
@@ -100,6 +99,19 @@ class TicketsController extends Controller
         $data = $q->get();
 
         return response()->json(['payload' => compact('data')]);
+
+    }
+
+    public function getList($status)
+    {
+
+        $now = Carbon::now()->toDateString();
+
+        $q = Tickets::with(['latestUser.user','department'])->where(['status' => $status,'date_issued' => $now])->get();
+
+        $payload = ['data' => $q];
+
+        return response()->json(compact('payload'), 200);
 
     }
 
@@ -188,19 +200,8 @@ class TicketsController extends Controller
 
         if($checkTicketBelongToUser > 0)
         {
-            $now = Carbon::now();
-            $ticketUserData = [
-                'user_id' => $user_id,
-                'ticket_id' => $ticket_id,
-                'served_time' => $served_time,
-                'status' => 1,
-                'complete_time' => $now
-            ];
-
 
             $tickets->update(['status' => 1]);
-
-            $ticketUser = TicketsUsers::create($ticketUserData);
 
             event(new \App\Events\DisplayNowServing($tickets->id));
             
@@ -219,7 +220,6 @@ class TicketsController extends Controller
     /**
      * This will process/serve a ticket after you have been called
      * This will restrict and validate if you are not the user that previously called this ticket
-     * In other words you need to call the ticket first before serving or process this ticket
      */
     public function serving(Request $request)
     {
@@ -282,7 +282,6 @@ class TicketsController extends Controller
     /**
      * This will complete the ticket transaction
      * This will validate and restrict if you are not the user that previously process/serving this ticket
-     * In other words you need to serve/process this ticket 
      */
     public function complete(Request $request)
     {
@@ -344,7 +343,6 @@ class TicketsController extends Controller
      /**
      * This will stop the ticket
      * This will validate and restrict if you are not the user who previously called or process this ticket
-     * In other words you need to call or process this ticket
      */
     public function stop(Request $request)
     {
@@ -408,7 +406,6 @@ class TicketsController extends Controller
     /**
      * This will back the ticket to queue list
      * This will validate and restrict if you are not the user who previously called this ticket
-     * In other words you need to first call this ticket
      */
     public function backToQueue(Request $request)
     {
@@ -432,18 +429,6 @@ class TicketsController extends Controller
 
             if($checkTicketOwner > 0)
             {
-                $now = Carbon::now();
-                $ticketUserData = [
-                    'ticket_id' => $ticket_id,
-                    'user_id' => $user_id,
-                    'served_time' => $served_time,
-                    'complete_time' => $now,
-                    'status' => 0
-                ];
-
-                $tickets->update(['status' => 0]);
-
-                $ticketUser = TicketsUsers::create($ticketUserData);
 
                 broadcast(new \App\Events\ProcessTicketBackToQueue($tickets->id, $tickets->priority, $tickets->department_id))->toOthers();
                 
