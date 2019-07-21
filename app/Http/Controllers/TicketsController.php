@@ -94,7 +94,7 @@ class TicketsController extends Controller
 
         $department_id = $this->getAuthUserDepartment();
 
-        $q = Tickets::where(['status' => 0, 'date_issued' => $now, 'department_id' => $department_id]);
+        $q = Tickets::where(['status' => 0, 'department_id' => $department_id]);
 
         $data = $q->get();
 
