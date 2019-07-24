@@ -29,6 +29,11 @@ class Tickets extends Model
         return $this->hasMany('App\TicketsUsers', 'ticket_id');
     }
 
+    public function oneUser()
+    {
+        return $this->hasOne('App\TicketsUsers', 'ticket_id');
+    }
+
     public function latestUser(){
 
         return $this->hasOne('App\TicketsUsers', 'ticket_id')->latest();
