@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: csab-queue
+    image: csab-queue-backend
     container_name: app
     restart: unless-stopped
     tty: true
