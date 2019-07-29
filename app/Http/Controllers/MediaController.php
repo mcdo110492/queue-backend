@@ -41,7 +41,7 @@ class MediaController extends Controller
     public function uploadMedia(Request $request)
     {
         $request->validate([
-            'medias' => 'required|mimetypes:video/mp4|max:25000'
+            'medias' => 'required|mimetypes:video/mp4|max:50000'
         ]);
 
         $path = Storage::putFile('public', $request->file('medias'));

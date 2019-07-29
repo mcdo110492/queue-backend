@@ -12,4 +12,9 @@ class Departments extends Model
         'name',
         'code'
     ];
+
+    public function counter()
+    {
+        return $this->hasOne('App\Counters', 'department_id');
+    }
 }

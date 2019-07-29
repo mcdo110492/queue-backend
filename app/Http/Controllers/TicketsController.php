@@ -107,7 +107,7 @@ class TicketsController extends Controller
 
         $now = Carbon::now()->toDateString();
 
-        $q = Tickets::with(['latestUser.user','department'])->where(['status' => $status,'date_issued' => $now])->get();
+        $q = Tickets::with(['latestUser.user','department.counter'])->where(['status' => $status,'date_issued' => $now])->get();
 
         $payload = ['data' => $q];
 
@@ -429,6 +429,21 @@ class TicketsController extends Controller
 
             if($checkTicketOwner > 0)
             {
+
+                $now = Carbon::now();
+                $ticketUserData = [
+                    'ticket_id' => $ticket_id,
+                    'user_id' => $user_id,
+                    'complete_time' => $now,
+                    'served_time' => $served_time,
+                    'status' => 0
+                ];
+
+                $tickets->update(['status' => 4]);
+
+                $ticketUser = TicketsUsers::create($ticketUserData);
+
+                $tickets->update(['status' => 0]);
 
                 broadcast(new \App\Events\ProcessTicketBackToQueue($tickets->id, $tickets->priority, $tickets->department_id))->toOthers();
                 
