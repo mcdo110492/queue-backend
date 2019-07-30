@@ -20,6 +20,7 @@ class Tickets extends Model
         'ticket_number',
         'priority',
         'status',
+        'priority_type',
         'date_issued',
         'department_id'
     ];

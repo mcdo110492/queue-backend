@@ -19,6 +19,7 @@ class CreateTicketsTable extends Migration
             $table->integer('department_id')->unsigned();
             $table->smallInteger('priority')->default(0);
             $table->smallInteger('status')->default(0);
+            $table->string('priority_type')->nullable();
             $table->date('date_issued');
             $table->timestamps();
         });

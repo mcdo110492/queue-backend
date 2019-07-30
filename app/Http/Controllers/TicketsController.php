@@ -55,6 +55,7 @@ class TicketsController extends Controller
             'ticket_number' => $ticket_number,
             'priority' => $request->input('priority'),
             'date_issued' => $now,
+            'priority_type' => $request->input('priority_type'),
             'department_id' => $department_id
         ];
 
@@ -66,16 +67,14 @@ class TicketsController extends Controller
             ['id', '!=', $ticket->id]
         ])->count();
 
-        $estimatedWaitingTime = 10;
-
         $payload = [
             'id' => $ticket->id,
             'date_issed' => $ticket->date_issued,
             'created_at' => $ticket->created_at->toDateTimeString(),
             'priority' => $ticket->priority,
+            'priority_type' => $ticket->priority_type,
             'ticket_number' => $ticket->ticket_number,
-            'people_in_waiting' => $getPeopleinWating,
-            'estimated_waiting_time' => $estimatedWaitingTime
+            'people_in_waiting' => $getPeopleinWating
         ];
 
         event(new \App\Events\ProcessIssueToken($ticket, $department_id));
