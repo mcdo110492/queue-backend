@@ -1,73 +1,43 @@
 version: "3"
-services:
-  #PHP Service
+
+services: 
+
+# PHP Application
   app:
     build:
-      context: .
-      dockerfile: Dockerfile
-    image: csab-queue-backend
-    container_name: app
-    restart: unless-stopped
-    tty: true
-    environment:
-      SERVICE_NAME: app
-      SERVICE_TAGS: dev
+      context: ./
+      dockerfile: app.dockerfile
     working_dir: /var/www
     volumes:
       - ./:/var/www
-      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
-    networks:
-      - app-network
+    environment:
+      - "DB_PORT=3306"
+      - "DB_HOST=database"
 
-  #Nginx Service
-  webserver:
-    image: nginx:alpine
-    container_name: webserver
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "8001:80"
-      - "443:443"
+# Webserver
+  web:
+    build:
+        context: ./
+        dockerfile: web.dockerfile
+    working_dir: /var/www
     volumes:
       - ./:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
-    networks:
-      - app-network
-
-  #MySQL Service
-  db:
-    image: mysql:5.7.22
-    container_name: db
-    restart: unless-stopped
-    tty: true
     ports:
-      - "3306:3306"
+      - 8080:80
+
+# Database
+  database:
+    image: mysql:5.7
+    volumes:
+      - dbdata:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_ROOT_PASSWORD: mcdonald1
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    volumes:
-      - dbdata:/var/lib/mysql/
-      - ./mysql/my.cnf:/etc/mysql/my.cnf
-    networks:
-      - app-network
-
-  #Redis Service
-  redis:
-    image: redis:5.0.5-alpine
-    container_name: redis
-    restart: unless-stopped
+      - "MYSQL_DATABASE=queue"
+      - "MYSQL_USER=csab"
+      - "MYSQL_PASSWORD=MDU8Qd7dffJdAwNeaSmgmr397y9dJy5"
+      - "MYSQL_ROOT_PASSWORD=sWScf82k3nc9P8DavgZ6wGrDJjY9DMG"
     ports:
-      - "6379:6379"
-    volumes:
-      - ./redis/redis.conf:/usr/local/etc/redis.conf
-    networks:
-      - app-network
+      - "33061:3306"
 
-#Docker Networks
-
-#Volumes
+# Volumes
 volumes:
   dbdata:
-    driver: local
