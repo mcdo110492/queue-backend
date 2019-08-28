@@ -119,6 +119,7 @@ class TicketsController extends Controller
      * This will call a ticket from the queue list
      * The status of the ticket must be 0 - pending
      * It can be called by anyone but it will restrict if the other user is currently calling this ticket
+     * This is also serving the ticket
      */
     public function call(Request $request)
     {
@@ -141,7 +142,7 @@ class TicketsController extends Controller
             //Get the latest current user transaction
             $checkUserCurrentTransaction = TicketsUsers::where(['user_id' => $user_id])->latest()->first();
             $userCurrentTicketStatus = isset($checkUserCurrentTransaction->status) ? $checkUserCurrentTransaction->status  : 0;
-            if($userCurrentTicketStatus === 1 || $userCurrentTicketStatus === 2)
+            if($userCurrentTicketStatus === 2)
             {
                 return response()->json(['payload' => 'Unable to call this token. You still have other token to process or complete'], 403);
             }
@@ -151,12 +152,12 @@ class TicketsController extends Controller
             $ticketUserData = [
                 'user_id' => $user_id,
                 'ticket_id' => $ticket_id,
-                'status' => 1,
+                'status' => 2,
                 'served_time' => $served_time,
                 'complete_time' => $now
             ];
 
-            $tickets->update(['status' => 1]);
+            $tickets->update(['status' => 2]);
 
             $ticketUser = TicketsUsers::create($ticketUserData);
             
@@ -200,7 +201,6 @@ class TicketsController extends Controller
         if($checkTicketBelongToUser > 0)
         {
 
-            $tickets->update(['status' => 1]);
 
             event(new \App\Events\DisplayNowServing($tickets->id));
             
@@ -280,7 +280,7 @@ class TicketsController extends Controller
 
     /**
      * This will complete the ticket transaction
-     * This will validate and restrict if you are not the user that previously process/serving this ticket
+     * This will validate and restrict if you are not the user that previously called/serving this ticket
      */
     public function complete(Request $request)
     {
