@@ -5,8 +5,8 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
-    image: laravel-queue-app
+      dockerfile: ./docker/app.Dockerfile
+    image: laravel_queue_app
     container_name: queue-backend
     restart: unless-stopped
     tty: true
@@ -14,15 +14,72 @@ services:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
     working_dir: /var/www
-    ports:
-      - "6001:6001"
     depends_on:
       - redis
       - mysql
     volumes:
       - .:/var/www
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
-      - ./docker/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
+    environment:
+      APP_ENV: local
+      CONTAINER_ROLE: app
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      QUEUE_DRIVER: redis
+      REDIS_HOST: redis
+    networks:
+      - app-network
+  
+  #Laravel Workers
+  worker:
+    build:
+      context: .
+      dockerfile: ./docker/worker.Dockerfile
+    image: laravel_queue_worker
+    container_name: queue-worker
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    depends_on:
+      - redis
+      - mysql
+    volumes:
+      - .:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    environment:
+      APP_ENV: local
+      CONTAINER_ROLE: app
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      QUEUE_DRIVER: redis
+      REDIS_HOST: redis
+    networks:
+      - app-network
+
+  #Laravel Websockets
+  websockets:
+    build:
+      context: .
+      dockerfile: ./docker/websockets.Dockerfile
+    image: laravel_queue_websockets
+    container_name: queue-websockets
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "6001:6001"
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    depends_on:
+      - redis
+      - mysql
+    volumes:
+      - .:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     environment:
       APP_ENV: local
       CONTAINER_ROLE: app
@@ -34,10 +91,11 @@ services:
       - app-network
 
 
+
   #Nginx Service
   webserver:
     image: nginx:alpine
-    container_name: webserver
+    container_name: laravel_webserver
     restart: unless-stopped
     tty: true
     volumes:
@@ -52,7 +110,7 @@ services:
   #MySQL Service
   mysql:
     image: mysql:5.7
-    container_name: laravel-mysql
+    container_name: laravel_mysql
     restart: unless-stopped
     tty: true
     ports:
@@ -69,7 +127,7 @@ services:
 
   #Redis Service
   redis:
-    container_name: laravel-redis
+    container_name: laravel_redis
     image: redis:4-alpine
     ports:
       - 6379:6379

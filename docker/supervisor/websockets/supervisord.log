@@ -1,0 +1,22 @@
+2019-09-10 02:34:46,080 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2019-09-10 02:34:46,159 INFO supervisord started with pid 1
+2019-09-10 02:34:47,163 INFO spawned: 'websockets' with pid 7
+2019-09-10 02:34:48,164 INFO success: websockets entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 05:15:53,285 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2019-09-10 05:15:53,318 INFO supervisord started with pid 1
+2019-09-10 05:15:54,322 INFO spawned: 'websockets' with pid 7
+2019-09-10 05:15:55,324 INFO success: websockets entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 05:44:23,528 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2019-09-10 05:44:23,552 INFO supervisord started with pid 1
+2019-09-10 05:44:24,555 INFO spawned: 'websockets' with pid 7
+2019-09-10 05:44:25,557 INFO success: websockets entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 05:51:11,745 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2019-09-10 05:51:11,769 INFO supervisord started with pid 1
+2019-09-10 05:51:12,773 INFO spawned: 'websockets' with pid 7
+2019-09-10 05:51:13,786 INFO success: websockets entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 06:06:07,455 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2019-09-10 06:06:07,466 INFO supervisord started with pid 1
+2019-09-10 06:06:08,469 INFO spawned: 'websockets' with pid 7
+2019-09-10 06:06:09,471 INFO success: websockets entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 07:37:13,117 WARN received SIGTERM indicating exit request
+2019-09-10 07:37:13,129 INFO waiting for websockets to die

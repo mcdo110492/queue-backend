@@ -1,0 +1,37 @@
+2019-09-10 02:34:46,081 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2019-09-10 02:34:46,159 INFO supervisord started with pid 1
+2019-09-10 02:34:47,162 INFO spawned: 'laravel-worker_00' with pid 7
+2019-09-10 02:34:48,164 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 03:36:12,370 WARN received SIGTERM indicating exit request
+2019-09-10 03:36:12,371 INFO waiting for laravel-worker_00 to die
+2019-09-10 03:36:12,390 INFO stopped: laravel-worker_00 (terminated by SIGTERM)
+2019-09-10 03:36:48,294 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2019-09-10 03:36:48,303 INFO supervisord started with pid 1
+2019-09-10 03:36:49,306 INFO spawned: 'laravel-worker_00' with pid 8
+2019-09-10 03:36:50,309 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 03:52:58,686 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2019-09-10 03:52:58,694 INFO supervisord started with pid 1
+2019-09-10 03:52:59,697 INFO spawned: 'laravel-worker_00' with pid 7
+2019-09-10 03:53:00,700 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 05:15:51,590 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2019-09-10 05:15:51,598 INFO supervisord started with pid 1
+2019-09-10 05:15:52,621 INFO spawned: 'laravel-worker_00' with pid 8
+2019-09-10 05:15:53,624 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 05:44:21,948 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2019-09-10 05:44:21,969 INFO supervisord started with pid 1
+2019-09-10 05:44:22,972 INFO spawned: 'laravel-worker_00' with pid 7
+2019-09-10 05:44:24,004 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 05:51:10,147 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2019-09-10 05:51:10,155 INFO supervisord started with pid 1
+2019-09-10 05:51:11,158 INFO spawned: 'laravel-worker_00' with pid 7
+2019-09-10 05:51:12,160 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 05:54:00,738 INFO exited: laravel-worker_00 (exit status 0; expected)
+2019-09-10 05:54:01,742 INFO spawned: 'laravel-worker_00' with pid 14
+2019-09-10 05:54:02,749 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 06:06:07,568 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2019-09-10 06:06:07,578 INFO supervisord started with pid 1
+2019-09-10 06:06:08,581 INFO spawned: 'laravel-worker_00' with pid 7
+2019-09-10 06:06:09,592 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-09-10 07:37:13,118 WARN received SIGTERM indicating exit request
+2019-09-10 07:37:13,126 INFO waiting for laravel-worker_00 to die
+2019-09-10 07:37:13,290 INFO stopped: laravel-worker_00 (terminated by SIGTERM)
