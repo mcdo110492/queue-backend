@@ -11,6 +11,4 @@
 |
 */
 
-Route::get('/', function () {
-    return response()->json(['status' => 'ok']);
-});
+Route::get('/', "AuthenticationJWT@status_ok");

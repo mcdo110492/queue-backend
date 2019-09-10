@@ -13,7 +13,11 @@ class AuthenticationJWT extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'status_ok']]);
+    }
+
+    public function status_ok() {
+        return response()->json(['status' => 'ok']);
     }
 
     public function login()
