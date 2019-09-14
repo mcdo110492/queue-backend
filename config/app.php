@@ -157,7 +157,7 @@ return [
         Illuminate\Queue\QueueServiceProvider::class,
         Illuminate\Redis\RedisServiceProvider::class,
         //Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
-        //Illuminate\Session\SessionServiceProvider::class,
+        Illuminate\Session\SessionServiceProvider::class,
        Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
@@ -171,7 +171,7 @@ return [
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
-       // App\Providers\AuthServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
@@ -193,7 +193,7 @@ return [
 
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
-        //'Auth' => Illuminate\Support\Facades\Auth::class,
+        'Auth' => Illuminate\Support\Facades\Auth::class,
         //'Blade' => Illuminate\Support\Facades\Blade::class,
         'Broadcast' => Illuminate\Support\Facades\Broadcast::class,
         'Bus' => Illuminate\Support\Facades\Bus::class,
@@ -219,7 +219,7 @@ return [
         'Response' => Illuminate\Support\Facades\Response::class,
         'Route' => Illuminate\Support\Facades\Route::class,
         'Schema' => Illuminate\Support\Facades\Schema::class,
-       // 'Session' => Illuminate\Support\Facades\Session::class,
+        'Session' => Illuminate\Support\Facades\Session::class,
         'Storage' => Illuminate\Support\Facades\Storage::class,
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,

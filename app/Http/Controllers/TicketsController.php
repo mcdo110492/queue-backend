@@ -422,9 +422,9 @@ class TicketsController extends Controller
 
         $user_id = $this->getAuthUser();
 
-        if($ticketStatus === 1)
+        if($ticketStatus === 2)
         {
-            $checkTicketOwner = TicketsUsers::where(['ticket_id' => $ticket_id, 'status' => 1, 'user_id' => $user_id])->count();
+            $checkTicketOwner = TicketsUsers::where(['ticket_id' => $ticket_id, 'status' => 2, 'user_id' => $user_id])->count();
 
             if($checkTicketOwner > 0)
             {
@@ -438,7 +438,7 @@ class TicketsController extends Controller
                     'status' => 0
                 ];
 
-                $tickets->update(['status' => 4]);
+        
 
                 $ticketUser = TicketsUsers::create($ticketUserData);
 
