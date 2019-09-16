@@ -129,6 +129,8 @@ services:
   redis:
     container_name: laravel_redis
     image: redis:4-alpine
+    restart: unless-stopped
+    tty: true
     ports:
       - 6379:6379
     volumes:
